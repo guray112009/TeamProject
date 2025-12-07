@@ -6,35 +6,37 @@ import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
-// ⭐ USE ENV VARIABLE (WORKS IN LOCAL + RENDER)
+// ⭐ 100% CORRECT FOR LOCAL + RENDER
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+// ⭐ Always include JSON + CORS headers
+axios.defaults.headers.common["Content-Type"] = "application/json";
+axios.defaults.withCredentials = false;
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  // Restore login from localStorage
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || null
   );
   const [token, setToken] = useState(localStorage.getItem("token") || "");
 
-  // Persist USER changes
+  // Persist USER
   useEffect(() => {
     if (user) localStorage.setItem("user", JSON.stringify(user));
     else localStorage.removeItem("user");
   }, [user]);
 
-  // Persist TOKEN changes
+  // Persist TOKEN
   useEffect(() => {
     if (token) localStorage.setItem("token", token);
     else localStorage.removeItem("token");
   }, [token]);
 
-  // Auth header helper
   const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
 
   // ============================================================
-  // ⭐ REGISTER (FIXED FOR RENDER)
+  // ⭐ REGISTER — FIXED FOR RENDER (FULL URL + JSON payload)
   // ============================================================
   const register = async (fullName, email, password, role) => {
     try {
@@ -47,16 +49,15 @@ export const AuthProvider = ({ children }) => {
 
       alert("Registration successful! Please login now.");
       return true;
-
     } catch (err) {
-      console.error("REGISTER ERROR:", err.response?.data);
+      console.error("REGISTER ERROR:", err.response?.data || err.message);
       alert(err.response?.data?.message || "Registration failed!");
       return false;
     }
   };
 
   // ============================================================
-  // ⭐ LOGIN (FIXED FOR RENDER)
+  // ⭐ LOGIN — FIXED FOR RENDER
   // ============================================================
   const login = async (email, password) => {
     try {
@@ -74,9 +75,8 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("token", jwtToken);
 
       return true;
-
     } catch (err) {
-      console.error("LOGIN ERROR:", err.response?.data);
+      console.error("LOGIN ERROR:", err.response?.data || err.message);
       alert(err.response?.data?.message || "Login failed!");
       return false;
     }
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   // ============================================================
-  // ROLE HELPERS
+  // HELPERS
   // ============================================================
   const isLoggedIn = () => !!user;
   const isAdmin = () => user?.role === "admin";
