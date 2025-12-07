@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../styles/staffDashboard.css";
+import "../../styles/StaffDashboard.css";   // ⭐ FIXED (capital S)
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -19,7 +19,7 @@ export default function StaffDashboard() {
   // LOAD STATS + RECENT ACTIVITY
   // ============================
   useEffect(() => {
-    fetch("http://localhost:5000/api/lostfound", {
+    fetch(`${import.meta.env.VITE_API_URL}/lostfound`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -137,7 +137,9 @@ export default function StaffDashboard() {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="no-data">No activity found.</td>
+                <td colSpan="5" className="no-data">
+                  No activity found.
+                </td>
               </tr>
             )}
           </tbody>
