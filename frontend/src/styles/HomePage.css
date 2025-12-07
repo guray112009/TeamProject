@@ -1,0 +1,173 @@
+/* ============================ HERO SECTION ============================ */
+
+.hero-section {
+  min-height: 100vh;
+  padding-top: 120px;
+  text-align: center;
+  color: #130745;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 800;
+}
+
+.hero-icon {
+  height: 90px;
+  margin: 20px auto;
+  filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  opacity: 0.9;
+}
+
+.hero-buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* ============================ WHY UNICONNECT ============================ */
+
+.why-section {
+  padding: 60px 0;
+  background: white;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #130745;
+  margin-bottom: 40px;
+}
+
+.why-grid {
+  max-width: 1150px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 35px;
+}
+
+.why-card {
+  background: #f7f7fb;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  transition: 0.3s;
+}
+
+.why-card:hover {
+  transform: scale(1.03);
+}
+
+.why-image {
+  width: 100%;
+  height: 180px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.why-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.why-text {
+  margin-top: 10px;
+}
+
+/* ============================ EVENTS SECTION ============================ */
+
+.events-section {
+  background: #e8f0ff;
+  padding: 60px 0;
+  text-align: center;
+}
+
+.events-title {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #130745;
+}
+
+.events-subtitle {
+  color: #4d4b57;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+.events-grid {
+  max-width: 1150px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.event-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.event-image {
+  width: 100%;
+  height: 180px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.event-title {
+  margin-top: 10px;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.event-description {
+  margin-top: 8px;
+  color: #444;
+}
+
+/* ============================ FOOTER ============================ */
+
+.home-footer {
+  background: #f7f7fb;
+  border-top: 1px solid #ddd;
+  padding: 15px 0;
+  margin-top: 20px;
+}
+
+.footer-content {
+  max-width: 1150px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-links a {
+  color: #444;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}

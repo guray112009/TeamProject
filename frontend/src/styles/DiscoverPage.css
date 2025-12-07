@@ -1,0 +1,82 @@
+/* ========================= HERO ========================= */
+
+.discover-container {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.discover-hero {
+  height: 75vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 5%;
+  color: white;
+  text-shadow: 0px 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.discover-title {
+  font-size: 4rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.discover-subtitle {
+  font-size: 1.3rem;
+  max-width: 550px;
+}
+
+/* ========================= CONTENT SECTION ========================= */
+
+.discover-grid-container {
+  padding: 70px 10%;
+  text-align: center;
+}
+
+.discover-section-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #130745;
+  margin-bottom: 40px;
+}
+
+.discover-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.discover-card {
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.08);
+  transition: 0.3s ease;
+}
+
+.discover-card:hover {
+  transform: scale(1.03);
+}
+
+.discover-image {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.discover-card-title {
+  margin-top: 15px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #130745;
+}
+
+.discover-card-desc {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: #444;
+}

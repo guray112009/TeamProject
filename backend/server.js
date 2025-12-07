@@ -9,6 +9,9 @@ import lostFoundRoutes from "./routes/lostFoundRoutes.js";
 import marketplaceRoutes from "./routes/marketplaceRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
+// ⭐ NEW — CHATBOT ROUTE
+import chatbotRoutes from "./routes/chatbotRoutes.js";
+
 dotenv.config();
 const app = express();
 
@@ -20,7 +23,7 @@ app.use(express.json());
 app.get("/api/test", (req, res) => {
   res.json({
     message: "Backend working! 🔥",
-    time: new Date()
+    time: new Date(),
   });
 });
 
@@ -29,6 +32,15 @@ app.use("/api/events", eventRoutes);
 app.use("/api/lostfound", lostFoundRoutes);
 app.use("/api/marketplace", marketplaceRoutes);
 app.use("/api/users", userRoutes);
+
+// ⭐ NEW — CHATBOT ENDPOINT
+app.use("/api/chatbot", chatbotRoutes);
+
+// ⭐ OPTIONAL — Global Error Handler (Safe)
+app.use((err, req, res, next) => {
+  console.error("🔥 Global Error:", err);
+  res.status(500).json({ error: "Something went wrong on the server." });
+});
 
 const PORT = process.env.PORT || 5000;
 

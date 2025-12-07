@@ -17,12 +17,12 @@ export const Navbar = () => {
 
   return (
     <div className="sticky top-0 z-50 bg-[#F4F8FF]/70 backdrop-blur-lg shadow-md">
-      <div className="flex justify-between items-center px-4 md:px-8 py-4 min-height-[60px]">
+      <div className="flex justify-between items-center px-4 md:px-8 py-4">
 
         {/* LOGO */}
         <NavLink
           to="/"
-          className="flex items-center justify-center text-2xl font-semibold space-x-2"
+          className="flex items-center text-2xl font-semibold space-x-2"
         >
           <img src={logo} alt="UniConnect Logo" className="h-10 w-auto" />
           <span className="text-[#051133]">UniConnect</span>
@@ -32,6 +32,10 @@ export const Navbar = () => {
         <div className="hidden md:flex items-center gap-6">
 
           <NavLink to="/" className="nav-link">Home</NavLink>
+
+          {/* ⭐ Discover Page */}
+          <NavLink to="/discover" className="nav-link">Discover</NavLink>
+
           <NavLink to="/lostFound" className="nav-link">Lost & Found</NavLink>
           <NavLink to="/events" className="nav-link">Events</NavLink>
           <NavLink to="/marketplace" className="nav-link">Collaborate</NavLink>
@@ -69,12 +73,9 @@ export const Navbar = () => {
           {/* USER CONTROLS */}
           <div className="flex items-center gap-3 ml-4">
 
-            {/* NOT LOGGED IN */}
             {!user && (
               <>
-                <NavLink to="/login" className="nav-link">
-                  Login
-                </NavLink>
+                <NavLink to="/login" className="nav-link">Login</NavLink>
 
                 <NavLink
                   to="/register"
@@ -87,10 +88,8 @@ export const Navbar = () => {
               </>
             )}
 
-            {/* LOGGED IN */}
             {user && (
               <>
-                {/* Show First Name */}
                 <button
                   onClick={goProfile}
                   className="text-[#051133] font-medium hover:underline"
@@ -101,7 +100,7 @@ export const Navbar = () => {
                 <button
                   onClick={() => {
                     logout();
-                    navigate("/login"); // prevent dashboard from showing
+                    navigate("/login");
                   }}
                   className="text-red-600 font-medium hover:bg-red-100 
                   px-3 py-1 rounded-lg transition-colors"
@@ -113,7 +112,7 @@ export const Navbar = () => {
           </div>
         </div>
 
-        {/* MOBILE MENU TOGGLE */}
+        {/* MOBILE MENU BUTTON */}
         <button
           className="md:hidden text-[#051133] text-2xl"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -122,14 +121,17 @@ export const Navbar = () => {
         </button>
       </div>
 
-      {/* ======================================
-                MOBILE MENU
-      ======================================= */}
+      {/* MOBILE MENU */}
       {mobileMenuOpen && (
         <div className="fixed top-16 left-0 w-full bg-white/95 shadow-lg z-40 md:hidden">
           <div className="flex flex-col p-6 gap-4">
 
             <NavLink to="/" className="mobile-link" onClick={() => setMobileMenuOpen(false)}>Home</NavLink>
+
+            <NavLink to="/discover" className="mobile-link" onClick={() => setMobileMenuOpen(false)}>
+              Discover
+            </NavLink>
+
             <NavLink to="/lostFound" className="mobile-link" onClick={() => setMobileMenuOpen(false)}>Lost & Found</NavLink>
             <NavLink to="/events" className="mobile-link" onClick={() => setMobileMenuOpen(false)}>Events</NavLink>
             <NavLink to="/marketplace" className="mobile-link" onClick={() => setMobileMenuOpen(false)}>Collaborate</NavLink>
@@ -164,7 +166,7 @@ export const Navbar = () => {
               </NavLink>
             )}
 
-            {/* AUTH ACTIONS */}
+            {/* AUTH SECTION */}
             <div className="flex flex-col gap-3 pt-4 border-t border-gray-200">
 
               {!user && (
@@ -204,8 +206,8 @@ export const Navbar = () => {
                   <button
                     onClick={() => {
                       logout();
-                      setMobileMenuOpen(false);
                       navigate("/login");
+                      setMobileMenuOpen(false);
                     }}
                     className="text-red-600 font-medium hover:bg-red-100 px-3 py-1 rounded-lg text-center"
                   >
