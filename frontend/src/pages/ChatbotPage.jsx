@@ -61,15 +61,18 @@ const ChatbotPage = () => {
     setMessages((prev) => [...prev, { sender: "bot", text: "" }]);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/chatbot", {
-        message: userText,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/chatbot`,
+        {
+          message: userText,
+        }
+      );
 
       const botReply = res.data.reply;
 
       await typeMessage(botReply);
     } catch (err) {
-      console.error(err);
+      console.error("Chatbot Error:", err);
     }
   };
 
@@ -89,6 +92,7 @@ const ChatbotPage = () => {
 
   return (
     <div className="chatbot-page-container">
+
       <div className="chatbot-box">
 
         {/* ⭐ HEADER WITH AVATAR */}
@@ -99,16 +103,29 @@ const ChatbotPage = () => {
 
         {/* CHAT WINDOW */}
         <div className="chat-window">
+
           {messages.map((msg, idx) => (
-            <div
-              key={idx}
-              className={`chat-bubble ${msg.sender === "user" ? "user-bubble" : "bot-bubble"}`}
+            <div key={idx}
+              className={`chat-row ${msg.sender === "bot" ? "bot-row" : "user-row"}`}
             >
-              {msg.text}
+              {/* Bot avatar beside bot messages */}
+              {msg.sender === "bot" && (
+                <img src={professorAvatar} className="bubble-avatar" alt="AI" />
+              )}
+
+              <div
+                className={`chat-bubble ${
+                  msg.sender === "user" ? "user-bubble" : "bot-bubble"
+                }`}
+              >
+                {msg.text}
+              </div>
             </div>
           ))}
 
-          {isTyping && <div className="typing-indicator">Professor is typing...</div>}
+          {isTyping && (
+            <div className="typing-indicator">Professor is typing...</div>
+          )}
 
           <div ref={chatEndRef}></div>
         </div>

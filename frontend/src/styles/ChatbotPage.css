@@ -1,61 +1,80 @@
-/* ===========================
-   CHATBOT LAYOUT
-   =========================== */
+/* PAGE CONTAINER */
 .chatbot-page-container {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 60px;
-  padding-bottom: 80px;
+  padding-top: 40px;
+  padding-bottom: 60px;
+  background: #f8f9ff;
   min-height: 100vh;
-  background: #f5f7ff;
 }
 
-/* Centered small box */
+/* CHAT BOX */
 .chatbot-box {
-  width: 100%;
-  max-width: 480px;         /* ⭐ SMALLER — more professional */
-  background: white;
+  width: 550px;
+  background: #ffffff;
   padding: 25px;
   border-radius: 18px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  animation: fadeIn 0.4s ease;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
-/* Avatar centered */
-.chatbot-avatar {
-  display: block;
-  width: 120px;
-  height: auto;
-  margin: 0 auto 10px auto;
+/* HEADER */
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 10px;
 }
 
-/* Title */
+.chat-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
 .chat-title {
-  text-align: center;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: #051133;
-  margin-bottom: 15px;
 }
 
-/* Chat window */
+/* CHAT WINDOW */
 .chat-window {
-  height: 300px;              /* ⭐ Smaller height */
+  height: 360px;
   overflow-y: auto;
   padding: 15px;
   background: #eef1ff;
   border-radius: 12px;
   margin-bottom: 15px;
-  border: 1px solid #dde1ff;
 }
 
-/* Chat bubbles */
+/* CHAT ROW */
+.chat-row {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.bot-row {
+  justify-content: flex-start;
+}
+
+.user-row {
+  justify-content: flex-end;
+}
+
+/* Bot avatar beside bubble */
+.bubble-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+/* BUBBLE STYLES */
 .chat-bubble {
   padding: 10px 14px;
   border-radius: 12px;
-  margin-bottom: 12px;
-  max-width: 80%;
+  max-width: 70%;
   font-size: 0.95rem;
   line-height: 1.4rem;
 }
@@ -63,25 +82,21 @@
 .user-bubble {
   background: #110753;
   color: white;
-  margin-left: auto;
 }
 
 .bot-bubble {
-  background: #dde3ff;
+  background: #dfe3ff;
   color: #000;
-  margin-right: auto;
 }
 
 /* Typing indicator */
 .typing-indicator {
   font-style: italic;
-  color: #666;
-  margin-bottom: 10px;
+  color: #444;
+  margin-top: 5px;
 }
 
-/* ===========================
-   INPUT AREA
-   =========================== */
+/* INPUT AREA */
 .chat-input-area {
   display: flex;
   gap: 10px;
@@ -104,11 +119,11 @@
   cursor: pointer;
 }
 
-/* Microphone button */
+/* Microphone */
 .mic-btn {
-  background: #e8eaff;
+  background: #e3e3ff;
   border: none;
-  font-size: 20px;
+  font-size: 22px;
   padding: 10px;
   border-radius: 50%;
   cursor: pointer;
@@ -116,12 +131,6 @@
 }
 
 .mic-listening {
-  background: #ffe1e1;
-  color: #d40000;
-}
-
-/* Smooth fade in */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to   { opacity: 1; transform: translateY(0); }
+  background: #ffcccc;
+  color: red;
 }
