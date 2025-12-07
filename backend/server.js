@@ -21,9 +21,8 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",       // local frontend
-      "https://your-render-frontend-url.onrender.com", // Render frontend URL
-      "*",                           // fallback (safe for your project)
+      "http://localhost:5173",                         
+      "https://uniconnect-frontend-p4zx.onrender.com",  // ⭐ REAL FRONTEND RENDER URL
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
@@ -55,7 +54,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/chatbot", chatbotRoutes);
 
 /* ============================================================
-   ⭐ GLOBAL ERROR HANDLER (Safe & professional)
+   ⭐ GLOBAL ERROR HANDLER
    ============================================================ */
 app.use((err, req, res, next) => {
   console.error("🔥 Global Error:", err);
