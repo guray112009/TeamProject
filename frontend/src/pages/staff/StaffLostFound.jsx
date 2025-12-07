@@ -10,10 +10,8 @@ export default function StaffLostFound() {
 
   // Fetch Lost & Found items
   useEffect(() => {
-    fetch("http://localhost:5000/api/lostfound", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    fetch(`${import.meta.env.VITE_API_URL}/lostfound`, {
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => setItems(data))
@@ -26,11 +24,9 @@ export default function StaffLostFound() {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/lostfound/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/lostfound/${id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (res.ok) {
@@ -59,7 +55,7 @@ export default function StaffLostFound() {
               <th>Location</th>
               <th>Reported By</th>
               <th>Date</th>
-              <th>Actions</th> {/* NEW */}
+              <th>Actions</th>
             </tr>
           </thead>
 
@@ -74,18 +70,13 @@ export default function StaffLostFound() {
               items.map((item) => (
                 <tr key={item._id}>
                   <td>{item.itemName}</td>
-
                   <td className={item.status === "lost" ? "lost-text" : "found-text"}>
                     {item.status}
                   </td>
-
                   <td>{item.location}</td>
-
                   <td>{item.createdBy?.email || "Unknown"}</td>
-
                   <td>{new Date(item.createdAt).toLocaleString()}</td>
 
-                  {/* ACTION BUTTONS */}
                   <td className="staff-actions-cell">
                     <button
                       className="staff-edit-btn"

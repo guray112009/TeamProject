@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// ⭐ USE ENV API URL (works in Render & Local)
+const API_BASE = import.meta.env.VITE_API_URL;
+
 export const CreateEventForm = () => {
   const navigate = useNavigate();
 
@@ -17,22 +20,30 @@ export const CreateEventForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await fetch("http://localhost:5000/api/events", {
+      // ⭐ FIXED — now uses your Render backend URL
+      const response = await fetch(`${API_BASE}/events`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        alert("Event created successfully!");
-        navigate("/events");
-      } else {
-        alert("Error submitting form");
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Error submitting form");
+        return;
       }
+
+      alert("Event created successfully!");
+      navigate("/events");
+
     } catch (error) {
-      console.error(error);
-      alert("Server error");
+      console.error("EVENT CREATE ERROR:", error);
+      alert("Server error (unable to connect to backend)");
     }
   };
 
@@ -44,6 +55,7 @@ export const CreateEventForm = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6 text-lg">
+          
           <div>
             <label className="block font-semibold mb-1">Title</label>
             <input
@@ -94,7 +106,7 @@ export const CreateEventForm = () => {
 
           <button
             type="submit"
-            className="w-full py-3 rounded-xl text-white font-semibold text-lg bg-linear-to-r from-[#130745] to-[#1a0a5e] hover:opacity-90 mt-4 shadow-md"
+            className="w-full py-3 rounded-xl text-white font-semibold text-lg bg-gradient-to-r from-[#130745] to-[#1a0a5e] hover:opacity-90 mt-4 shadow-md"
           >
             Create Event
           </button>

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "../../styles/StaffLostFound.css";
+import "../../styles/StaffLostFound.css"; 
 import { useAuth } from "../../context/AuthContext";
 
 export default function StaffLostFoundEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { token } = useAuth();
+
+  const API = import.meta.env.VITE_API_URL; // ⭐ NEW — universal API base
 
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -16,9 +18,11 @@ export default function StaffLostFoundEdit() {
     location: "",
   });
 
-  // Load existing LostFound Item
+  // ================================
+  // LOAD EXISTING LOST/FOUND ITEM
+  // ================================
   useEffect(() => {
-    fetch(`http://localhost:5000/api/lostfound/${id}`, {
+    fetch(`${API}/lostfound/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -31,32 +35,32 @@ export default function StaffLostFoundEdit() {
           status: data.status,
           location: data.location,
         });
+
         setLoading(false);
       })
       .catch((err) => console.error("Error loading item:", err));
-  }, [id, token]);
+  }, [id, token, API]);
 
-  // Handle input
+  // Handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Submit update
+  // ================================
+  // SUBMIT UPDATE
+  // ================================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/lostfound/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${API}/lostfound/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (response.ok) {
         alert("Item updated successfully!");
@@ -79,6 +83,7 @@ export default function StaffLostFoundEdit() {
 
       <div className="staff-lf-table-wrapper" style={{ maxWidth: "700px" }}>
         <form className="staff-edit-form" onSubmit={handleSubmit}>
+          
           {/* Item Name */}
           <label className="staff-edit-label">Item Name</label>
           <input

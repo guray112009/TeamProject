@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
+// ⭐ ALWAYS use environment API URL (local + render)
+const API_BASE = import.meta.env.VITE_API_URL;
+
 export const LostItemForm = () => {
   const navigate = useNavigate();
   const { user, token } = useAuth(); // ✔ get user + token
@@ -27,7 +30,7 @@ export const LostItemForm = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/lostfound", {
+      const response = await fetch(`${API_BASE}/lostfound`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

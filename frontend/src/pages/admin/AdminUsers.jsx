@@ -8,6 +8,9 @@ export default function AdminUsers() {
   const { token } = useAuth();
   const [users, setUsers] = useState([]);
 
+  // BASE URL from .env
+  const API = import.meta.env.VITE_API_URL;
+
   // EDIT MODAL STATE
   const [editUser, setEditUser] = useState(null);
   const [editForm, setEditForm] = useState({
@@ -29,13 +32,13 @@ export default function AdminUsers() {
   // FETCH USERS
   // ================================
   useEffect(() => {
-    fetch("http://localhost:5000/api/users", {
+    fetch(`${API}/users`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => setUsers(data))
       .catch((err) => console.error("Error fetching users:", err));
-  }, [token]);
+  }, [token, API]);
 
   // ================================
   // DELETE USER
@@ -45,7 +48,7 @@ export default function AdminUsers() {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/users/${id}`, {
+      const res = await fetch(`${API}/users/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -79,7 +82,7 @@ export default function AdminUsers() {
   // ================================
   const handleSaveEdit = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/users/${editUser._id}`, {
+      const res = await fetch(`${API}/users/${editUser._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -115,7 +118,7 @@ export default function AdminUsers() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/users/register", {
+      const res = await fetch(`${API}/users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -203,7 +206,7 @@ export default function AdminUsers() {
         </div>
 
         {/* =============================== */}
-        {/* EDIT USER MODAL (FIXED – NOW FULLY EDITABLE) */}
+        {/* EDIT USER MODAL */}
         {/* =============================== */}
         {editUser && (
           <div className="modal-overlay">

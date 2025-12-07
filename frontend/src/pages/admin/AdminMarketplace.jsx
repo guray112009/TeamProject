@@ -4,6 +4,9 @@ import "../../styles/AdminLayout.css";
 import "../../styles/AdminMarketplace.css";
 import { useAuth } from "../../context/AuthContext";
 
+// ⭐ Use Render API URL
+const API_BASE = import.meta.env.VITE_API_URL;
+
 export default function AdminMarketplace() {
   const { token } = useAuth();
   const [items, setItems] = useState([]);
@@ -16,35 +19,43 @@ export default function AdminMarketplace() {
     price: "",
   });
 
-  // Load Marketplace Items
+  // ============================
+  // LOAD MARKETPLACE ITEMS
+  // ============================
   useEffect(() => {
-    fetch("http://localhost:5000/api/marketplace", {
+    fetch(`${API_BASE}/marketplace`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => setItems(data))
-      .catch((err) => console.error("Error fetching marketplace:", err));
+      .catch((err) =>
+        console.error("❌ Error fetching marketplace (Admin):", err)
+      );
   }, [token]);
 
   // ============================
-  // DELETE ITEM
+  // DELETE MARKETPLACE ITEM
   // ============================
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Delete this marketplace item?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this marketplace item?"
+    );
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/marketplace/${id}`, {
+      const res = await fetch(`${API_BASE}/marketplace/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (res.ok) {
         setItems(items.filter((item) => item._id !== id));
-        alert("Item deleted.");
+        alert("Item deleted successfully.");
+      } else {
+        alert("Delete failed.");
       }
     } catch (err) {
-      console.error("Error deleting item:", err);
+      console.error("❌ Delete error:", err);
     }
   };
 
@@ -61,41 +72,35 @@ export default function AdminMarketplace() {
   };
 
   // ============================
-  // SAVE EDITS
+  // SAVE EDIT
   // ============================
   const handleSaveEdit = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/marketplace/${editItem._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(editForm),
-        }
-      );
+      const res = await fetch(`${API_BASE}/marketplace/${editItem._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(editForm),
+      });
 
       if (!res.ok) throw new Error("Update failed");
 
       const updated = await res.json();
 
-      // Update table instantly
       setItems((prev) =>
         prev.map((i) => (i._id === updated._id ? updated : i))
       );
 
       alert("Item updated successfully!");
 
-      // Close modal
       setEditItem(null);
     } catch (err) {
-      console.error("Edit error:", err);
+      console.error("❌ Edit error:", err);
     }
   };
 
-  // Update form fields
   const handleChange = (e) =>
     setEditForm({ ...editForm, [e.target.name]: e.target.value });
 
@@ -128,7 +133,7 @@ export default function AdminMarketplace() {
                   <tr key={item._id}>
                     <td>{item.title}</td>
                     <td>{item.description}</td>
-                    <td>{item.price || "0"}</td>
+                    <td>${item.price || "0"}</td>
                     <td>{item.postedBy?.fullName || "Unknown"}</td>
                     <td>
                       {item.createdAt
@@ -202,7 +207,10 @@ export default function AdminMarketplace() {
                   💾 Save
                 </button>
 
-                <button className="cancel-btn" onClick={() => setEditItem(null)}>
+                <button
+                  className="cancel-btn"
+                  onClick={() => setEditItem(null)}
+                >
                   ❌ Cancel
                 </button>
               </div>

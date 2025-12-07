@@ -4,6 +4,9 @@ import "../../styles/AdminLayout.css";
 import "../../styles/AdminLostFound.css";
 import { useAuth } from "../../context/AuthContext";
 
+// ⭐ API BASE (Render + Local)
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 export default function AdminLostFound() {
   const { token } = useAuth();
   const [items, setItems] = useState([]);
@@ -21,7 +24,7 @@ export default function AdminLostFound() {
   // FETCH LOST & FOUND ITEMS
   // ================================
   useEffect(() => {
-    fetch("http://localhost:5000/api/lostfound", {
+    fetch(`${API_BASE}/lostfound`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -37,7 +40,7 @@ export default function AdminLostFound() {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/lostfound/${id}`, {
+      const res = await fetch(`${API_BASE}/lostfound/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -69,17 +72,14 @@ export default function AdminLostFound() {
   // ================================
   const handleSaveEdit = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/lostfound/${editItem._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(editForm),
-        }
-      );
+      const res = await fetch(`${API_BASE}/lostfound/${editItem._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(editForm),
+      });
 
       if (!res.ok) throw new Error("Update failed");
 
@@ -105,7 +105,6 @@ export default function AdminLostFound() {
       <AdminSidebar />
 
       <div className="admin-content">
-
         <h1 className="admin-page-title">Lost & Found Management</h1>
         <p className="admin-page-subtitle">
           Review and manage lost & found reports submitted by students.
@@ -133,7 +132,7 @@ export default function AdminLostFound() {
                     <td>{item.description}</td>
                     <td>{item.location || "Not provided"}</td>
                     <td className="status-cell">{item.status || "pending"}</td>
-                    <td>{item.reportedBy?.fullName || "Unknown"}</td>
+                    <td>{item.reportedBy?.fullName || item.createdBy?.email || "Unknown"}</td>
                     <td>
                       {item.createdAt
                         ? new Date(item.createdAt).toLocaleDateString()
@@ -219,7 +218,6 @@ export default function AdminLostFound() {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );

@@ -16,9 +16,11 @@ export default function StaffEventsEdit() {
     date: "",
   });
 
-  // Load existing event
+  /* ============================================================
+     LOAD EXISTING EVENT (UPDATED WITH VITE_API_URL)
+     ============================================================ */
   useEffect(() => {
-    fetch(`http://localhost:5000/api/events/${id}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/events/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -35,18 +37,22 @@ export default function StaffEventsEdit() {
       .catch((err) => console.error("Error loading event:", err));
   }, [id, token]);
 
-  // Handle input change
+  /* ============================================================
+     HANDLE INPUT CHANGE
+     ============================================================ */
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Submit update
+  /* ============================================================
+     SUBMIT UPDATE (UPDATED WITH VITE_API_URL)
+     ============================================================ */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/events/${id}`,
+        `${import.meta.env.VITE_API_URL}/events/${id}`,
         {
           method: "PUT",
           headers: {
@@ -72,6 +78,9 @@ export default function StaffEventsEdit() {
 
   if (loading) return <p style={{ padding: "40px" }}>Loading event...</p>;
 
+  /* ============================================================
+     UI (UNCHANGED)
+     ============================================================ */
   return (
     <div className="staff-lf-container">
       <h1 className="staff-lf-title">Edit Event</h1>

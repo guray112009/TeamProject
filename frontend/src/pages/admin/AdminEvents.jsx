@@ -4,6 +4,9 @@ import "../../styles/AdminLayout.css";
 import "../../styles/AdminEvents.css";
 import { useAuth } from "../../context/AuthContext";
 
+// ⭐ USE API BASE URL (LOCAL + RENDER)
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 export default function AdminEvents() {
   const { token } = useAuth();
   const [events, setEvents] = useState([]);
@@ -21,7 +24,7 @@ export default function AdminEvents() {
   // FETCH EVENTS
   // ================================
   useEffect(() => {
-    fetch("http://localhost:5000/api/events", {
+    fetch(`${API_BASE}/events`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -37,7 +40,7 @@ export default function AdminEvents() {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/events/${id}`, {
+      const res = await fetch(`${API_BASE}/events/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -69,23 +72,19 @@ export default function AdminEvents() {
   // ================================
   const handleSaveEdit = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/events/${editEvent._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(editForm),
-        }
-      );
+      const res = await fetch(`${API_BASE}/events/${editEvent._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(editForm),
+      });
 
       if (!res.ok) throw new Error("Update failed");
 
       const updated = await res.json();
 
-      // Update UI
       setEvents((prev) =>
         prev.map((e) => (e._id === updated._id ? updated : e))
       );
@@ -106,7 +105,9 @@ export default function AdminEvents() {
 
       <div className="admin-content">
         <h1 className="admin-page-title">Events Management</h1>
-        <p className="admin-page-subtitle">View and manage all campus events.</p>
+        <p className="admin-page-subtitle">
+          View and manage all campus events.
+        </p>
 
         <div className="admin-table-container">
           <table className="admin-table">
@@ -127,14 +128,15 @@ export default function AdminEvents() {
                     <td>{ev.title}</td>
                     <td>{ev.description}</td>
                     <td>
-                      {ev.date
-                        ? new Date(ev.date).toLocaleString()
-                        : "N/A"}
+                      {ev.date ? new Date(ev.date).toLocaleString() : "N/A"}
                     </td>
                     <td>{ev.location || "N/A"}</td>
 
                     <td className="action-buttons">
-                      <button className="edit-btn" onClick={() => handleEdit(ev)}>
+                      <button
+                        className="edit-btn"
+                        onClick={() => handleEdit(ev)}
+                      >
                         ✏️ Edit
                       </button>
 
@@ -202,14 +204,16 @@ export default function AdminEvents() {
                 <button className="save-btn" onClick={handleSaveEdit}>
                   💾 Save
                 </button>
-                <button className="cancel-btn" onClick={() => setEditEvent(null)}>
+                <button
+                  className="cancel-btn"
+                  onClick={() => setEditEvent(null)}
+                >
                   ❌ Cancel
                 </button>
               </div>
             </div>
           </div>
         )}
-
       </div>
     </div>
   );

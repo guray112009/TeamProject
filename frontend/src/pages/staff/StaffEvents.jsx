@@ -3,14 +3,19 @@ import "../../styles/StaffEvents.css";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+// ⭐ USE ENV VARIABLE (WORKS LOCAL + RENDER)
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 export default function StaffEvents() {
   const [events, setEvents] = useState([]);
   const { token } = useAuth();
   const navigate = useNavigate();
 
-  // Fetch events
+  // ================================
+  // FETCH EVENTS (UPDATED FOR RENDER)
+  // ================================
   useEffect(() => {
-    fetch("http://localhost:5000/api/events", {
+    fetch(`${API_BASE}/events`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -18,12 +23,14 @@ export default function StaffEvents() {
       .catch((err) => console.error("Error fetching events:", err));
   }, [token]);
 
-  // Delete event
+  // ================================
+  // DELETE EVENT (UPDATED FOR RENDER)
+  // ================================
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this event?")) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/events/${id}`, {
+      const res = await fetch(`${API_BASE}/events/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

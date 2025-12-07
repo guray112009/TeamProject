@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export const CreateMarketplaceForm = () => {
   const navigate = useNavigate();
+  const { user, token } = useAuth();
+
+  const API_BASE = import.meta.env.VITE_API_URL;
 
   const [formData, setFormData] = useState({
     title: "",
@@ -17,19 +21,31 @@ export const CreateMarketplaceForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const payload = {
+      ...formData,
+      createdBy: user?._id || user?.id,
+    };
+
     try {
-      const response = await fetch("http://localhost:5000/api/marketplace", {
+      const response = await fetch(`${API_BASE}/marketplace`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
       });
 
-      if (response.ok) {
-        alert("Marketplace item created!");
-        navigate("/marketplace");
-      } else {
-        alert("Error submitting form");
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Server error");
+        return;
       }
+
+      alert("Marketplace item created!");
+      navigate("/marketplace");
     } catch (error) {
       console.error(error);
       alert("Server error");
