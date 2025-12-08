@@ -7,32 +7,44 @@ export const EventsPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ title: "", description: "", date: "" });
 
+  // ⭐ USE ENV BASE URL
+  const API = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
-    fetch("http://localhost:5000/api/events")
+    fetch(`${API}/events`)
       .then((res) => res.json())
       .then((data) => setEvents(data))
-      .catch((err) => console.error(err));
-  }, []);
+      .catch((err) => console.error("Error fetching events:", err));
+  }, [API]);
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/events", {
+      const res = await fetch(`${API}/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+
       if (res.ok) {
         alert("Event created!");
+        const newEvent = await res.json();
+
+        // ⭐ Update UI instantly
+        setEvents([...events, newEvent]);
+
+        // Reset form
         setFormData({ title: "", description: "", date: "" });
         setShowForm(false);
-        const updated = await res.json();
-        setEvents([...events, updated]);
-      } else alert("Error creating event");
+      } else {
+        const err = await res.json();
+        alert("Error creating event: " + (err.message || "Unknown error"));
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Server error:", err);
       alert("Server error");
     }
   };
@@ -53,10 +65,15 @@ export const EventsPage = () => {
       {/* Event Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {events.map((event) => (
-          <div key={event._id} className="p-4 border rounded-xl shadow hover:shadow-lg transition">
+          <div
+            key={event._id}
+            className="p-4 border rounded-xl shadow hover:shadow-lg transition"
+          >
             <h3 className="text-xl font-bold text-[#130745]">{event.title}</h3>
             <p className="text-gray-700 mt-2">{event.description}</p>
-            <p className="mt-2 font-semibold">Date: {new Date(event.date).toLocaleDateString()}</p>
+            <p className="mt-2 font-semibold">
+              Date: {new Date(event.date).toLocaleDateString()}
+            </p>
           </div>
         ))}
       </div>
@@ -74,6 +91,7 @@ export const EventsPage = () => {
             <h2 className="text-3xl font-extrabold text-[#130745] mb-6 text-center">
               Create Event
             </h2>
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
@@ -84,6 +102,7 @@ export const EventsPage = () => {
                 className="w-full border px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#130745]"
                 required
               />
+
               <textarea
                 name="description"
                 value={formData.description}
@@ -93,6 +112,7 @@ export const EventsPage = () => {
                 className="w-full border px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#130745]"
                 required
               />
+
               <input
                 type="date"
                 name="date"
@@ -101,6 +121,7 @@ export const EventsPage = () => {
                 className="w-full border px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#130745]"
                 required
               />
+
               <button
                 type="submit"
                 className="w-full py-3 rounded-xl text-white font-semibold text-lg bg-gradient-to-r from-[#130745] to-[#1a0a5e] hover:opacity-90 shadow-md"

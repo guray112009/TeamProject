@@ -12,15 +12,18 @@ export const MarketplacePage = () => {
     image: "",
   });
 
+  // ⭐ Use ENV BASE URL
+  const API_BASE = import.meta.env.VITE_API_URL;
+
   // ============================
   // FETCH ALL ITEMS
   // ============================
   useEffect(() => {
-    fetch("http://localhost:5000/api/marketplace")
+    fetch(`${API_BASE}/marketplace`)
       .then((res) => res.json())
       .then((data) => setItems(data))
-      .catch((err) => console.error(err));
-  }, []);
+      .catch((err) => console.error("Error fetching marketplace:", err));
+  }, [API_BASE]);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,7 +42,7 @@ export const MarketplacePage = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/marketplace", {
+      const res = await fetch(`${API_BASE}/marketplace`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
